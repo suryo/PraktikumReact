@@ -21,6 +21,22 @@ const App = () => {
     setFilteredData(newData);
  };
 
+ const ratingFilterFunction = (rating) => {
+    setSearch(rating);
+    const newData = data.filter((item) => {
+      return item.rating === parseInt(rating);
+    });
+    setFilteredData(newData);
+ };
+
+ const priceFilterFunction = (price) => {
+    setSearch(price);
+    const newData = data.filter((item) => {
+      return item.price === parseInt(price);
+    });
+    setFilteredData(newData);
+ };
+
  return (
     <View style={styles.container}>
       <TextInput
@@ -29,6 +45,10 @@ const App = () => {
         value={search}
         placeholder="Cari tempat wisata"
       />
+      <Button title="Rating 4" onPress={() => ratingFilterFunction('4')} />
+      <Button title="Rating 5" onPress={() => ratingFilterFunction('5')} />
+      <Button title="Harga < 70000" onPress={() => priceFilterFunction('70000')} />
+      <Button title="Harga >= 70000" onPress={() => priceFilterFunction('70000')} />
       <FlatList
         data={filteredData}
         keyExtractor={(item) => item.id}
