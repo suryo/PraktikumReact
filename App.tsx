@@ -1,118 +1,90 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, {useState} from 'react';
+import {View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList} from 'react-native';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+const KalkulatorScreen = () => {
+ const [angka1, setAngka1] = useState('');
+ const [angka2, setAngka2] = useState('');
+ const [hasil, setHasil] = useState('');
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+ const penjumlahan = () => {
+    const result = parseInt(angka1) + parseInt(angka2);
+    setHasil(result);
+ };
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+ const pengurangan = () => {
+    const result = parseInt(angka1) - parseInt(angka2);
+    setHasil(result);
+ };
 
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+ const perkalian = () => {
+    const result = parseInt(angka1) * parseInt(angka2);
+    setHasil(result);
+ };
 
-function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+ const pembagian = () => {
+    const result = parseInt(angka1) / parseInt(angka2);
+    setHasil(result);
+ };
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+ return (
+    <View style={styles.container}>
+      <TextInput
+        style={styles.input}
+        onChangeText={setAngka1}
+        value={angka1}
+        placeholder="Masukkan angka pertama"
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
+      <TextInput
+        style={styles.input}
+        onChangeText={setAngka2}
+        value={angka2}
+        placeholder="Masukkan angka kedua"
+      />
+      <TouchableOpacity style={styles.button} onPress={penjumlahan}>
+        <Text style={styles.buttonText}>+</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={pengurangan}>
+        <Text style={styles.buttonText}>-</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={perkalian}>
+        <Text style={styles.buttonText}>x</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={pembagian}>
+        <Text style={styles.buttonText}>/</Text>
+      </TouchableOpacity>
+      <Text style={styles.hasil}>Hasil: {hasil}</Text>
+    </View>
+ );
+};
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
+ container: {
+    flex: 1,
+    padding: 20,
+ },
+ input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    padding: 10,
+    marginBottom: 10,
+ },
+ button: {
+    backgroundColor: '#1E90FF',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+ },
+ buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+ },
+ hasil: {
     fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
+    fontWeight: 'bold',
+    marginBottom: 20,
+ },
 });
 
-export default App;
+export default KalkulatorScreen;
