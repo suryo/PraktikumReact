@@ -1,58 +1,44 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList} from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TextInput, Button, FlatList } from 'react-native';
 
-const KalkulatorScreen = () => {
- const [angka1, setAngka1] = useState('');
- const [angka2, setAngka2] = useState('');
- const [hasil, setHasil] = useState('');
+const data = [
+ { id: '1', name: 'Pantai Sunset', desc: 'Sebuah pantai yang indah dengan pesawah matahari terbenam' },
+ { id: '2', name: 'Gunung Merapi', desc: 'Sebuah gunung berapi yang terkenal dengan keindahannya' },
+ { id: '3', name: 'Danau Toba', desc: 'Danau terbesar di Asia Tenggara yang memiliki keunikan alam' },
+];
 
- const penjumlahan = () => {
-    const result = parseInt(angka1) + parseInt(angka2);
-    setHasil(result);
- };
+const App = () => {
+ const [search, setSearch] = useState('');
+ const [filteredData, setFilteredData] = useState(data);
 
- const pengurangan = () => {
-    const result = parseInt(angka1) - parseInt(angka2);
-    setHasil(result);
- };
-
- const perkalian = () => {
-    const result = parseInt(angka1) * parseInt(angka2);
-    setHasil(result);
- };
-
- const pembagian = () => {
-    const result = parseInt(angka1) / parseInt(angka2);
-    setHasil(result);
+ const searchFilterFunction = (text) => {
+    setSearch(text);
+    const newData = data.filter((item) => {
+      const itemData = item.name ? item.name.toUpperCase() : ''.toUpperCase();
+      const textData = text.toUpperCase();
+      return itemData.indexOf(textData) > -1;
+    });
+    setFilteredData(newData);
  };
 
  return (
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        onChangeText={setAngka1}
-        value={angka1}
-        placeholder="Masukkan angka pertama"
+        onChangeText={searchFilterFunction}
+        value={search}
+        placeholder="Cari tempat wisata"
       />
-      <TextInput
-        style={styles.input}
-        onChangeText={setAngka2}
-        value={angka2}
-        placeholder="Masukkan angka kedua"
+      <FlatList
+        data={filteredData}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.listItem}>
+            <Text style={styles.name}>{item.name}</Text>
+            <Text style={styles.desc}>{item.desc}</Text>
+          </View>
+        )}
       />
-      <TouchableOpacity style={styles.button} onPress={penjumlahan}>
-        <Text style={styles.buttonText}>+</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={pengurangan}>
-        <Text style={styles.buttonText}>-</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={perkalian}>
-        <Text style={styles.buttonText}>x</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={pembagian}>
-        <Text style={styles.buttonText}>/</Text>
-      </TouchableOpacity>
-      <Text style={styles.hasil}>Hasil: {hasil}</Text>
     </View>
  );
 };
@@ -69,22 +55,17 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
  },
- button: {
-    backgroundColor: '#1E90FF',
-    padding: 10,
-    borderRadius: 5,
+ listItem: {
     marginBottom: 10,
  },
- buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
- },
- hasil: {
+ name: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 5,
+ },
+ desc: {
+    fontSize: 14,
  },
 });
 
-export default KalkulatorScreen;
+export default App;

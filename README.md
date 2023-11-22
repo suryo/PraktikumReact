@@ -1,7 +1,7 @@
 
-# Praktikum Mobile Application with Reac Native
+# Praktikum Mobile Application with React Native
 
-Praktikum_1 : build simple calculator with react native
+Praktikum_2 : build simple search apps from data array
 
 
 ## Authors
@@ -15,7 +15,7 @@ clone repo from github
 
 ```bash
   cd PraktikumReact
-  git checkout praktikum_1
+  git checkout praktikum_2
   npm install
 ```
 
