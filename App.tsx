@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, FlatList } from 'react-native';
 
 const data = [
- { id: '1', name: 'Pantai Sunset', desc: 'Sebuah pantai yang indah dengan pesawah matahari terbenam' },
- { id: '2', name: 'Gunung Merapi', desc: 'Sebuah gunung berapi yang terkenal dengan keindahannya' },
- { id: '3', name: 'Danau Toba', desc: 'Danau terbesar di Asia Tenggara yang memiliki keunikan alam' },
+ { id: '1', name: 'Pantai Sunset', desc: 'Sebuah pantai yang indah dengan pesawah matahari terbenam', rating: 4, price: 50000 },
+ { id: '2', name: 'Gunung Merapi', desc: 'Sebuah gunung berapi yang terkenal dengan keindahannya', rating: 5, price: 80000 },
+ { id: '3', name: 'Danau Toba', desc: 'Danau terbesar di Asia Tenggara yang memiliki keunikan alam', rating: 4, price: 60000 },
 ];
 
 const App = () => {
@@ -36,6 +36,8 @@ const App = () => {
           <View style={styles.listItem}>
             <Text style={styles.name}>{item.name}</Text>
             <Text style={styles.desc}>{item.desc}</Text>
+            <Text style={styles.rating}>Rating: {item.rating}</Text>
+            <Text style={styles.price}>Harga: {item.price}</Text>
           </View>
         )}
       />
@@ -64,6 +66,14 @@ const styles = StyleSheet.create({
     marginBottom: 5,
  },
  desc: {
+    fontSize: 14,
+    marginBottom: 5,
+ },
+ rating: {
+    fontSize: 14,
+    marginBottom: 5,
+ },
+ price: {
     fontSize: 14,
  },
 });
