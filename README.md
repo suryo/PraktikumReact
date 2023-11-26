@@ -1,7 +1,7 @@
 
 # Praktikum Mobile Application with React Native
 
-Praktikum_4 : Splash Screen
+Praktikum_5 : Camera Access
 
 
 ## Authors
@@ -15,7 +15,7 @@ clone repo from github
 
 ```bash
   cd PraktikumReact
-  git checkout praktikum_4
+  git checkout materi_5
   npm install
 ```
 
