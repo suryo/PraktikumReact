@@ -6,6 +6,7 @@ import HomeScreen from './screens/HomeScreen';
 import CalculatorScreen from './screens/CalculatorScreen';
 import SearchScreen from './screens/SearchScreen';
 import SplashScreen from './screens/CustomSplashScreen';
+import CameraScreen from './screens/CameraScreen';
 
 const Stack = createStackNavigator();
 
@@ -17,6 +18,11 @@ function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Calculator" component={CalculatorScreen} />
         <Stack.Screen name="Search" component={SearchScreen} />
+        <Stack.Screen
+          name="Camera"
+          component={CameraScreen}
+          options={{ title: 'Camera' }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

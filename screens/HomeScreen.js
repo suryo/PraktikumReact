@@ -14,6 +14,10 @@
            title="Search"
            onPress={() => navigation.navigate('Search')}
          />
+           <Button
+           title="Camera"
+           onPress={() => navigation.navigate('Camera')}
+         />
        </View>
      );
    }
