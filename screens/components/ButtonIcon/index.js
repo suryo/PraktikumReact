@@ -17,7 +17,11 @@ const ButtonIcon = ({title, type}) => {
 
   const handlePress = () => {
     // Navigate to the 'Calculator' screen when the button is pressed
-    navigation.navigate('Calculator');
+    if(title==="Kalkulator")
+    {
+      navigation.navigate('Calculator');
+    }
+    
   };
 
   const HIcon = () => {
