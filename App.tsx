@@ -25,7 +25,7 @@ function App() {
     <NavigationContainer>
     <Stack.Navigator initialRouteName="Splash">
         <Stack.Screen name="Splash" component={SplashScreen}   options={{ headerShown: false }}/>
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Calculator" component={CalculatorScreen} />
         <Stack.Screen name="Search" component={SearchScreen} />
 
