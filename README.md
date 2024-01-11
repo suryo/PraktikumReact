@@ -30,5 +30,3 @@ to run on android, please run this command
 ```bash
   npx react-native run-android
 ```
-
-
