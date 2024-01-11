@@ -63,22 +63,22 @@ const App = () => {
     }
   };
 
-  const tambahkanKeKeranjang = () => {
+ // ...
+
+const tambahkanKeKeranjang = () => {
+  try {
     if (!pilihanBarang || !quantity) {
-      Alert.alert('Error', 'Pilihan barang dan quantity harus diisi.');
-      return;
+      throw new Error('Pilihan barang dan quantity harus diisi.');
     }
 
     const barang = Barang[pilihanBarang];
     if (!barang) {
-      Alert.alert('Error', 'Pilihan barang tidak valid.');
-      return;
+      throw new Error('Pilihan barang tidak valid.');
     }
 
     const qty = parseInt(quantity, 10);
     if (isNaN(qty) || qty <= 0) {
-      Alert.alert('Error', 'Quantity harus angka positif.');
-      return;
+      throw new Error('Quantity harus angka positif.');
     }
 
     const updatedKeranjang = { ...keranjang };
@@ -97,7 +97,17 @@ const App = () => {
     setQuantity('');
 
     cekPromoBarang1(); // Cek promo Barang1 setelah menambahkan ke keranjang
-  };
+
+    // Menampilkan alert "Berhasil"
+    Alert.alert('Berhasil', 'Barang berhasil ditambahkan ke keranjang.');
+  } catch (error) {
+    // Menampilkan alert "Error" jika terjadi error
+    Alert.alert('Error', error.message);
+  }
+};
+
+// ...
+
 
   const menuKeranjang = () => {
     return (
