@@ -21,7 +21,25 @@ const ButtonIcon = ({title, type}) => {
     {
       navigation.navigate('Calculator');
     }
-    
+    if(title==="Shop")
+    {
+      navigation.navigate('Shop');
+    }
+    if(title==="Partner")
+    {
+      navigation.navigate('Partnership');
+    }
+    if(title==="Blog")
+    {
+      navigation.navigate('Blog');
+    }
+    if(title==="Cart")
+    {
+      navigation.navigate('Cart');
+    }
+
+
+
   };
 
   const HIcon = () => {

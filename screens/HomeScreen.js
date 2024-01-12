@@ -30,16 +30,16 @@ import {ScrollView} from 'react-native-gesture-handler';
         </ImageBackground>
         <Saldo />
         <View style={styles.layanan}>
-          <Text style={styles.label}>Our Product</Text>
+          <Text style={styles.label}>Our Menu</Text>
           <View style={styles.iconLayanan}>
-            <ButtonIcon title="T-Shirt" type="layanan"/>
-            <ButtonIcon title="Pants" type="layanan" />
-            <ButtonIcon title="Backpack" type="layanan" />
-            <ButtonIcon title="Footware" type="layanan" />
-            <ButtonIcon title="Outdoor" type="layanan" />
+            <ButtonIcon title="Shop" type="layanan"/>
+            <ButtonIcon title="Partner" type="layanan" />
+            <ButtonIcon title="Blog" type="layanan" />
+            <ButtonIcon title="Cart" type="layanan" />
+            {/* <ButtonIcon title="Outdoor" type="layanan" />
             <ButtonIcon title="Pouch" type="layanan" />
             <ButtonIcon title="Shoes" type="layanan" />
-            <ButtonIcon title="Belt" type="layanan" />
+            <ButtonIcon title="Belt" type="layanan" /> */}
           </View>
         </View>
         <View style={styles.pesananAktif}>
