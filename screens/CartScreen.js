@@ -1,76 +1,110 @@
-import React, { useEffect,useState} from 'react';
-import {View, Text, StyleSheet, TextInput, Button, Alert} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Button, FlatList, Modal } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { WARNA_ABU_ABU } from '../screens/utils/constant';
+import { ScrollView } from 'react-native-gesture-handler';
 
-const ShopScreen = () => {
-  const [number1, setNumber1] = useState('');
-  const [number2, setNumber2] = useState('');
-  const [result, setResult] = useState('');
-  const [storedData, setStoredData] = useState('');
-
-
+const CartScreen = () => {
+  const [storedData, setStoredData] = useState([]);
+  const [totalHarga, setTotalHarga] = useState(0);
 
   useEffect(() => {
     fetchData();
+     // Call hitungTotalHarga when the screen is loaded
   }, []);
 
   const fetchData = async () => {
     try {
       const data = await AsyncStorage.getItem('@storage_Key');
       if (data !== null) {
-        console.log(data);
-        setStoredData(data);
+        setStoredData(JSON.parse(data));
+        hitungTotalHarga();
       }
+      
     } catch (error) {
       console.error(error);
     }
   };
 
   const hitungTotalHarga = () => {
-    let totalHarga = 0;
+    let total = 0;
 
-    Object.entries(keranjang).forEach(([namaBarang, dataBarang]) => {
-      totalHarga += dataBarang.harga * dataBarang.quantity;
+    Object.entries(storedData).forEach(([namaBarang, cart]) => {
+      total += cart.harga * cart.quantity;
     });
 
-    setTotalHargaKeranjang(totalHarga);
+    setTotalHarga(total);
 
-    cekVoucher(); // Cek voucher setelah menghitung total harga
+    // Call the cekVoucher or any other logic you want
+    cekVoucher();
   };
 
-  return (
-    <View>
-       <View>
-      <Text>Isi Keranjang:</Text>
-      {/* ... (kode lainnya) */}
-      <Button title="Cek Promo & Hitung Total Harga" onPress={hitungTotalHarga} />
+  const cekVoucher = () => {
+    // Implement your voucher logic here
+  };
+
+  const renderItem = ({ item }) => (
+    <View style={styles.item}>
+      <Text>{`${item.namaBarang} @Rp ${item.cart.harga} | QTY : ${item.cart.quantity} | SubTotal : ${(item.cart.harga) * (item.cart.quantity)}`}</Text>
     </View>
-      <Text style={styles.result}>Hasil: {storedData}</Text>
+  );
+
+  return (
+    <View style={styles.page}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.header}>
+        <Text style={styles.label}>Isi Keranjang:</Text>
+          <FlatList
+            data={Object.entries(storedData).map(([namaBarang, cart]) => ({ key: namaBarang, namaBarang, cart }))}
+            renderItem={renderItem}
+          />
+          <View style={styles.totalContainer}>
+            <Text style={styles.labelTotal}>Total Harga:</Text>
+            <Text style={styles.total}>{`Rp ${totalHarga}`}</Text>
+          </View>
+          <Button title="Cek Promo & Hitung Total Harga" onPress={hitungTotalHarga} />
+        </View>
+      </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  page: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: 'white',
   },
-  input: {
-    width: '80%',
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 10,
-    padding: 10,
+  header: {
+    paddingTop: 10,
+    paddingHorizontal: 30,
+    backgroundColor: WARNA_ABU_ABU,
+    flex: 1,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
   },
-  buttonsContainer: {
+  label: {
+    fontSize: 18,
+    fontFamily: 'TitilliumWeb-Bold',
+  },
+  totalContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '60%',
-    marginBottom: 10,
+    justifyContent: 'space-between',
+    marginTop: 10,
+    marginBottom: 20,
   },
-  result: {fontSize: 24},
+  labelTotal: {
+    fontSize: 18,
+    fontFamily: 'TitilliumWeb-Bold',
+  },
+  total: {
+    fontSize: 18,
+    fontFamily: 'TitilliumWeb-Regular',
+  },
+  item: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
 });
 
-export default ShopScreen;
+export default CartScreen;
