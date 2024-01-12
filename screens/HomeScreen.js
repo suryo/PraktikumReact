@@ -43,7 +43,7 @@ import {ScrollView} from 'react-native-gesture-handler';
           </View>
         </View>
         <View style={styles.pesananAktif}>
-          <Text style={styles.label}>Pesanan Aktif</Text>
+          <Text style={styles.label}>test</Text>
           <PesananAktif title="Pesanan No. 0002142" status="Sudah Selesai"/>
           <PesananAktif title="Pesanan No. 0002142" status="Masih Dicuci"/>
           <PesananAktif title="Pesanan No. 0002142" status="Sudah Selesai"/>

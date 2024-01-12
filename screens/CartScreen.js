@@ -1,36 +1,51 @@
-import React, {useState} from 'react';
+import React, { useEffect,useState} from 'react';
 import {View, Text, StyleSheet, TextInput, Button, Alert} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ShopScreen = () => {
   const [number1, setNumber1] = useState('');
   const [number2, setNumber2] = useState('');
   const [result, setResult] = useState('');
+  const [storedData, setStoredData] = useState('');
 
-  const addNumbers = () => {
-    const num1 = parseInt(number1);
-    const num2 = parseInt(number2);
-    const sum = num1 + num2;
-    setResult(sum.toString());
+
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const data = await AsyncStorage.getItem('@storage_Key');
+      if (data !== null) {
+        console.log(data);
+        setStoredData(data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const subtractNumbers = () => {
-    const num1 = parseInt(number1);
-    const num2 = parseInt(number2);
-    const diff = num1 - num2;
-    setResult(diff.toString());
+  const hitungTotalHarga = () => {
+    let totalHarga = 0;
+
+    Object.entries(keranjang).forEach(([namaBarang, dataBarang]) => {
+      totalHarga += dataBarang.harga * dataBarang.quantity;
+    });
+
+    setTotalHargaKeranjang(totalHarga);
+
+    cekVoucher(); // Cek voucher setelah menghitung total harga
   };
 
   return (
-    <View style={styles.container}>
-      <Text>
-            Shop
-      </Text>
-    
-      <View style={styles.buttonsContainer}>
-        <Button title="Tambah" onPress={addNumbers} />
-        <Button title="Kurang" onPress={subtractNumbers} />
-      </View>
-      <Text style={styles.result}>Hasil: {result}</Text>
+    <View>
+       <View>
+      <Text>Isi Keranjang:</Text>
+      {/* ... (kode lainnya) */}
+      <Button title="Cek Promo & Hitung Total Harga" onPress={hitungTotalHarga} />
+    </View>
+      <Text style={styles.result}>Hasil: {storedData}</Text>
     </View>
   );
 };
