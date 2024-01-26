@@ -41,9 +41,6 @@ function App() {
         <Stack.Screen name="Partnership" component={PartnershipScreen} />
         <Stack.Screen name="Blog" component={BlogScreen} />
         <Stack.Screen name="Cart" component={CartScreen} />
-
-
-
         <Stack.Screen name="Text_component" component={Text_component} />
         <Stack.Screen name="Text_input_component" component={Text_input_component} />
         <Stack.Screen name="Button_component" component={Button_component} />
@@ -53,7 +50,10 @@ function App() {
         <Stack.Screen name="Activity_indicator_component" component={Activity_indicator_component} />
         <Stack.Screen name="Modal_component" component={Modal_component} />
       </Stack.Navigator>
+      
     </NavigationContainer>
+
+    
   );
 }
 

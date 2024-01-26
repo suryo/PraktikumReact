@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Button, FlatList, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Button, FlatList, TextInput, TouchableOpacity, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { WARNA_ABU_ABU } from '../screens/utils/constant';
-import { ScrollView } from 'react-native-gesture-handler';
 import Modal from 'react-native-modal';
 
 const CartScreen = () => {
@@ -13,13 +11,18 @@ const CartScreen = () => {
 
   useEffect(() => {
     fetchData();
+    hitungTotalHarga(); // Memanggil fungsi hitungTotalHarga saat komponen pertama kali dirender
   }, []);
 
   const fetchData = async () => {
     try {
-      const data = await AsyncStorage.getItem('@storage_Key');
+      const data = await AsyncStorage.getItem('@shopping_cart');
       if (data !== null) {
         setStoredData(JSON.parse(data));
+        //var cart = JSON.parse(data);
+        
+        //Alert.alert("kucing"+cart);
+        // hitungTotalHarga(); // Pindahkan ini ke useEffect agar dihitung di awal screen
         hitungTotalHarga();
       }
     } catch (error) {
@@ -35,11 +38,11 @@ const CartScreen = () => {
     });
 
     setTotalHarga(total);
+    // Alert.alert("kucing"+total);
   };
 
   const applyDiscount = () => {
     let discount = 0;
-    setTotalHarga(updatedTotalHarga);
     switch (voucherCode) {
       case 'PROMO1':
         discount = totalHarga * 0.1;
@@ -51,59 +54,66 @@ const CartScreen = () => {
         discount = 10;
         break;
       default:
-        setIsModalVisible(false); // Close the modal if the voucher is not recognized
-        return; // Exit the function to avoid updating totalHarga
+        setIsModalVisible(false);
+        return;
     }
-  
+
     const updatedTotalHarga = totalHarga - discount;
     setTotalHarga(updatedTotalHarga);
     setIsModalVisible(false);
   };
-  
+
+  const removeItem = (namaBarang) => {
+    const updatedCart = { ...storedData };
+    delete updatedCart[namaBarang];
+
+    setStoredData(updatedCart);
+    AsyncStorage.setItem('@shopping_cart', JSON.stringify(updatedCart));
+    hitungTotalHarga();
+  };
 
   const renderItem = ({ item }) => (
     <View style={styles.item}>
-      <Text>{`${item.namaBarang} @Rp ${item.cart.harga} | QTY : ${item.cart.quantity} | SubTotal : ${(item.cart.harga) * (item.cart.quantity)}`}</Text>
+      <Text>{`${item[0]} @Rp ${item[1].harga} | QTY : ${item[1].quantity} | SubTotal : ${(item[1].harga) * (item[1].quantity)}`}</Text>
+      <Button title="Remove" onPress={() => removeItem(item[0])} color="#fd4f00" />
     </View>
   );
 
   return (
     <View style={styles.page}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <Text style={styles.label}>Isi Keranjang:</Text>
-          <FlatList
-            data={Object.entries(storedData).map(([namaBarang, cart]) => ({ key: namaBarang, namaBarang, cart }))}
-            renderItem={renderItem}
-          />
-          <View style={styles.totalContainer}>
-            <Text style={styles.labelTotal}>Total Harga:</Text>
-            <Text style={styles.total}>{`Rp ${totalHarga}`}</Text>
-          </View>
-          <Button title="Cek Promo & Hitung Total Harga" onPress={() => setIsModalVisible(true)} />
-        </View>
+      <View style={styles.header}>
+        <Text style={styles.label}>Isi Keranjang:</Text>
+      </View>
+      <FlatList
+        data={Object.entries(storedData)}
+        renderItem={renderItem}
+        keyExtractor={(item) => item[0]}
+        showsVerticalScrollIndicator={false}
+      />
+      <View style={styles.totalContainer}>
+        <Text style={styles.labelTotal}>Total Harga:</Text>
+        <Text style={styles.total}>{`Rp ${totalHarga}`}</Text>
+      </View>
+      <Button title="Cek Promo & Hitung Total Harga" onPress={() => setIsModalVisible(true)} color="#fd4f00" />
 
-        <Modal
-          isVisible={isModalVisible}
-          onBackdropPress={() => setIsModalVisible(false)}
-          useNativeDriver={true}
-          style={styles.modal}
-        >
-          <View style={styles.modalContainer}>
-            <TouchableOpacity style={styles.closeButton} onPress={() => setIsModalVisible(false)}>
-              <Text style={styles.closeButtonText}>X</Text>
-            </TouchableOpacity>
-            <Text style={styles.label}>Input Voucher:</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Masukkan kode voucher"
-              onChangeText={(text) => setVoucherCode(text)}
-            />
-            <Button title="Apply" onPress={applyDiscount} />
-            <Button title="Cancel" onPress={() => setIsModalVisible(false)} />
-          </View>
-        </Modal>
-      </ScrollView>
+      <Modal
+        isVisible={isModalVisible}
+        onBackdropPress={() => setIsModalVisible(false)}
+        useNativeDriver={true}
+        style={styles.modal}
+      >
+        <TouchableOpacity style={styles.closeButton} onPress={() => setIsModalVisible(false)}>
+          <Text style={styles.closeButtonText}>X</Text>
+        </TouchableOpacity>
+        <Text style={styles.label}>Input Voucher:</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Masukkan kode voucher"
+          onChangeText={(text) => setVoucherCode(text)}
+        />
+        <Button title="Apply" onPress={applyDiscount} color="#fd4f00" />
+        <Button title="Cancel" onPress={() => setIsModalVisible(false)} color="#fd4f00" />
+      </Modal>
     </View>
   );
 };
@@ -116,43 +126,39 @@ const styles = StyleSheet.create({
   header: {
     paddingTop: 10,
     paddingHorizontal: 30,
-    backgroundColor: WARNA_ABU_ABU,
-    flex: 1,
+    backgroundColor: '#fd4f00',
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
   },
   label: {
     fontSize: 18,
-    fontFamily: 'TitilliumWeb-Bold',
+    fontWeight: 'bold',
   },
   totalContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 10,
     marginBottom: 20,
+    paddingHorizontal: 30,
   },
   labelTotal: {
     fontSize: 18,
-    fontFamily: 'TitilliumWeb-Bold',
+    fontWeight: 'bold',
   },
   total: {
     fontSize: 18,
-    fontFamily: 'TitilliumWeb-Regular',
   },
   item: {
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 30,
   },
   modal: {
     margin: 0,
     justifyContent: 'flex-end',
-  },
-  modalContainer: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
-    height: '60%', // Adjust the height as needed
   },
   closeButton: {
     position: 'absolute',
